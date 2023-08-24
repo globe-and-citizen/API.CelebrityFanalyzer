@@ -2,6 +2,7 @@ import { fetchFromFirestore } from './firebase'
 import page404 from './routes/404.html'
 import company from './routes/company.js'
 import html from './routes/index.html'
+import v1 from './routes/v1.html'
 
 export default {
   async fetch(request, env, ctx) {
@@ -20,6 +21,8 @@ export default {
       case '/prompts/2023-07/visitors':
         const visitors = await fetchFromFirestore('prompts/2023-07/visitors')
         return new Response(JSON.stringify(visitors, null, 2), { headers: { 'Content-Type': 'application/json' } })
+      case '/v1':
+        return new Response(v1, { headers: { 'content-type': 'text/html;charset=UTF-8' } })
     }
 
     return new Response(page404, { headers: { 'content-type': 'text/html;charset=UTF-8' }, status: 404 })
