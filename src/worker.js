@@ -1,6 +1,6 @@
 import { fetchFromFirestore } from './firebase'
 import page404 from './routes/404.html'
-import gc from './routes/globe-and-citizen.js'
+import company from './routes/company.js'
 import html from './routes/index.html'
 
 export default {
@@ -11,8 +11,8 @@ export default {
       case '/':
         return new Response(html, { headers: { 'content-type': 'text/html;charset=UTF-8' } })
 
-      case '/globe-and-citizen':
-        return new Response(gc, { headers: { 'Content-Type': 'application/json' } })
+      case '/company':
+        return new Response(company, { headers: { 'Content-Type': 'application/json' } })
 
       case '/stats':
         const api = await fetchFromFirestore('prompts')
