@@ -2,3 +2,8 @@ name = "api-celebrityfanalyzer"
 main = "src/worker.js"
 compatibility_date = "2023-08-24"
 account_id = "febb3b25d5ad9fea8d9db175fe2c3477"
+
+compatibility_flags = ["nodejs_compat"]
+
+[site]
+bucket = "./public"
