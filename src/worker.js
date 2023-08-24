@@ -1,6 +1,6 @@
-import page404 from './404.html'
-import gc from './globe-and-citizen.js'
-import html from './index.html'
+import page404 from './routes/404.html'
+import gc from './routes/globe-and-citizen.js'
+import html from './routes/index.html'
 
 export default {
   async fetch(request, env, ctx) {
