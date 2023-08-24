@@ -18,9 +18,11 @@ export default {
       case '/prompts':
         const prompts = await fetchFromFirestore('prompts')
         return new Response(JSON.stringify(prompts, null, 2), { headers: { 'Content-Type': 'application/json' } })
+
       case '/prompts/2023-07/visitors':
         const visitors = await fetchFromFirestore('prompts/2023-07/visitors')
         return new Response(JSON.stringify(visitors, null, 2), { headers: { 'Content-Type': 'application/json' } })
+
       case '/v1':
         return new Response(v1, { headers: { 'content-type': 'text/html;charset=UTF-8' } })
     }
