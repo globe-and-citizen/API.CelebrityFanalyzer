@@ -14,9 +14,12 @@ export default {
       case '/company':
         return new Response(company, { headers: { 'Content-Type': 'application/json' } })
 
-      case '/stats':
-        const api = await fetchFromFirestore('prompts')
-        return new Response(JSON.stringify(api, null, 2), { headers: { 'Content-Type': 'application/json' } })
+      case '/prompts':
+        const prompts = await fetchFromFirestore('prompts')
+        return new Response(JSON.stringify(prompts, null, 2), { headers: { 'Content-Type': 'application/json' } })
+      case '/prompts/2023-07/visitors':
+        const visitors = await fetchFromFirestore('prompts/2023-07/visitors')
+        return new Response(JSON.stringify(visitors, null, 2), { headers: { 'Content-Type': 'application/json' } })
     }
 
     return new Response(page404, { headers: { 'content-type': 'text/html;charset=UTF-8' }, status: 404 })
