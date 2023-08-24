@@ -1,5 +1,5 @@
 {
-  "name": "sample-node-server",
+  "name": "api.celebrityfanalyzer",
   "version": "1.0.0",
   "private": true,
   "scripts": {
