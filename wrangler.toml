@@ -1,4 +1,4 @@
-name = "sample-node-server"
+name = "api-celebrityfanalyzer"
 main = "src/worker.js"
 compatibility_date = "2023-08-01"
 account_id = "febb3b25d5ad9fea8d9db175fe2c3477"
