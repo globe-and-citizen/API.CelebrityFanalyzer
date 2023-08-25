@@ -1,5 +1,6 @@
 import { fetchFromFirestore } from './firebase'
 import page404 from './routes/404.html'
+import collection from './routes/collection.js'
 import company from './routes/company.js'
 import html from './routes/index.html'
 import v1 from './routes/v1.html'
@@ -19,8 +20,8 @@ export default {
         return new Response(company, { headers: { 'Content-Type': 'application/json' } })
 
       case `/${collectionName}`:
-        const collection = await fetchFromFirestore(collectionName)
-        return new Response(JSON.stringify(collection, null, 2), { headers: { 'Content-Type': 'application/json' } })
+        const response = await collection(collectionName)
+        return new Response(response, { headers: { 'Content-Type': 'application/json' } })
 
       case `/${collectionName}/${documentId}/visitors`:
         const visitors = await fetchFromFirestore(`${collectionName}/${documentId}/visitors`)
