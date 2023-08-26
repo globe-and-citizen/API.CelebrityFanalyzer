@@ -11,6 +11,7 @@ export default {
 
     const collectionName = pathname.split('/').filter(Boolean)[0]
     const documentId = pathname.split('/').filter(Boolean)[1]
+    const subcollectionName = pathname.split('/').filter(Boolean)[2]
 
     switch (pathname) {
       case '/':
@@ -27,12 +28,17 @@ export default {
         const response = await collection(collectionName)
         return new Response(response, { headers: { 'Content-Type': 'application/json' } })
 
-      case `/${collectionName}/${documentId}/visitors`:
-        const visitors = await fetchFromFirestore(`${collectionName}/${documentId}/visitors`)
-        return new Response(JSON.stringify(visitors, null, 2), { headers: { 'Content-Type': 'application/json' } })
-
-      case '/v1':
-        return new Response(v1, { headers: { 'content-type': 'text/html;charset=UTF-8' } })
+      default:
+        if ((collectionName === 'prompts' || collectionName === 'entries') && /^[0-9]{4}-[0-9]{2}$/.test(documentId)) {
+          switch (subcollectionName) {
+            case 'visitors':
+            case 'shares':
+            case 'likes':
+              const subcollectionData = await fetchFromFirestore(`${collectionName}/${documentId}/${subcollectionName}`)
+              return new Response(JSON.stringify(subcollectionData, null, 2), { headers: { 'Content-Type': 'application/json' } })
+          }
+        }
+        break
     }
 
     return new Response(page404, { headers: { 'content-type': 'text/html;charset=UTF-8' }, status: 404 })
