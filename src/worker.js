@@ -16,6 +16,9 @@ export default {
       case '/':
         return new Response(html, { headers: { 'content-type': 'text/html;charset=UTF-8' } })
 
+      case '/v1':
+        return new Response(v1, { headers: { 'content-type': 'text/html;charset=UTF-8' } })
+
       case '/company':
         return new Response(company, { headers: { 'Content-Type': 'application/json' } })
 
