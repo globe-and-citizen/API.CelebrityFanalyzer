@@ -22,7 +22,8 @@ export default {
       case '/company':
         return new Response(company, { headers: { 'Content-Type': 'application/json' } })
 
-      case `/${collectionName}`:
+      case '/prompts':
+      case '/entries':
         const response = await collection(collectionName)
         return new Response(response, { headers: { 'Content-Type': 'application/json' } })
 
