@@ -12,6 +12,7 @@
   </head>
 
   <body>
+    <!-- Swagger Documentation: https://swagger.io/docs/specification/about/ -->
     <div id="swagger-ui"></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.19.5/swagger-ui-bundle.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.19.5/swagger-ui-standalone-preset.js"></script>
@@ -28,13 +29,14 @@
 
         window.ui = ui
       }
-    </script>
-    <script>
+
       var spec = {
         openapi: '3.0.1',
         info: {
+          description:
+            'This is the API documentation for Celebrity Fanalyzer.<br />You can find out more about the project [here](https://github.com/globe-and-citizen/celebrity-fanalyzer).',
           version: '1.0.0',
-          title: 'Celebrity Fanalyzer API Documentation v1'
+          title: 'Celebrity Fanalyzer API'
         },
         paths: {
           '/prompts': {
@@ -56,9 +58,9 @@
               }
             }
           },
-          '/prompts/{id}': {
+          '/prompts/{id}/visitors': {
             get: {
-              summary: 'Get a prompt.',
+              summary: 'Get visitors from a prompt.',
               operationId: 'getPrompt',
               tags: ['Prompts API'],
               parameters: [
@@ -84,14 +86,14 @@
             }
           }
         },
+
         components: {
           schemas: {
             Id: {
               description: 'Prompt ID',
-              type: 'integer',
-              format: 'int64',
+              type: 'string',
               readOnly: true,
-              example: 1
+              example: '2023-11'
             },
             ArticleForList: {
               properties: {
