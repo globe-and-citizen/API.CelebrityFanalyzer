@@ -15,10 +15,10 @@ export default {
 
     switch (pathname) {
       case '/':
-        return new Response(html, { headers: { 'content-type': 'text/html;charset=UTF-8' } })
+        return new Response(html, { headers: { 'content-type': 'text/html' } })
 
       case '/v1':
-        return new Response(v1, { headers: { 'content-type': 'text/html;charset=UTF-8' } })
+        return new Response(v1, { headers: { 'content-type': 'text/html' } })
 
       case '/company':
         return new Response(company, { headers: { 'Content-Type': 'application/json' } })
@@ -41,6 +41,6 @@ export default {
         break
     }
 
-    return new Response(page404, { headers: { 'content-type': 'text/html;charset=UTF-8' }, status: 404 })
+    return new Response(page404, { headers: { 'content-type': 'text/html' }, status: 404 })
   }
 }
