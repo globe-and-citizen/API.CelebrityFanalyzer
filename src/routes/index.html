@@ -2,22 +2,180 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Celebrity Fanalyzer API</title>
+    <title>API Documentation v1</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.19.5/swagger-ui.css" />
+    <style>
+      .topbar {
+        display: none;
+      }
+    </style>
   </head>
+
   <body>
-    <h1>Welcome to the Celebrity Fanalyzer API!</h1>
-    <h2>Routes will be added bellow</h2>
-    <h3>
-      Check the Globe & Citizen apps at
-      <a href="/company">/globe-and-citizen</a>
-    </h3>
-    <h3>
-      Take a look at a sample of the
-      <a href="/prompts">/prompts</a>
-      and the
-      <a href="/prompts/2023-07/visitors">/visitors</a>
-      of the first prompt (2023-07)
-    </h3>
+    <!-- Swagger Documentation: https://swagger.io/docs/specification/about/ -->
+    <div id="swagger-ui"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.19.5/swagger-ui-bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.19.5/swagger-ui-standalone-preset.js"></script>
+    <script>
+      window.onload = function () {
+        const ui = SwaggerUIBundle({
+          spec: spec,
+          dom_id: '#swagger-ui',
+          deepLinking: true,
+          presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
+          plugins: [SwaggerUIBundle.plugins.DownloadUrl],
+          layout: 'StandaloneLayout'
+        })
+
+        window.ui = ui
+      }
+
+      var spec = {
+        openapi: '3.0.1',
+        info: {
+          description:
+            'This is the API documentation for Celebrity Fanalyzer.<br />You can find out more about the project [here](https://github.com/globe-and-citizen/celebrity-fanalyzer).',
+          version: '1.0.0',
+          title: 'Celebrity Fanalyzer API'
+        },
+        paths: {
+          '/prompts': {
+            get: {
+              summary: 'Get a list of all prompts.',
+              operationId: 'listArticles',
+              tags: ['Prompts API'],
+              responses: {
+                200: {
+                  description: 'Success',
+                  content: {
+                    'application/json': {
+                      schema: {
+                        $ref: '#/components/schemas/ArticleList'
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          '/prompts/{id}/visitors': {
+            get: {
+              summary: 'Get visitors from a prompt.',
+              operationId: 'getPrompt',
+              tags: ['Prompts API'],
+              parameters: [
+                {
+                  $ref: '#/components/parameters/Id'
+                }
+              ],
+              responses: {
+                200: {
+                  description: 'Success',
+                  content: {
+                    'application/json': {
+                      schema: {
+                        $ref: '#/components/schemas/Article'
+                      }
+                    }
+                  }
+                },
+                404: {
+                  $ref: '#/components/responses/NotFound'
+                }
+              }
+            }
+          }
+        },
+
+        components: {
+          schemas: {
+            Id: {
+              description: 'Prompt ID',
+              type: 'string',
+              readOnly: true,
+              example: '2023-11'
+            },
+            ArticleForList: {
+              properties: {
+                id: {
+                  $ref: '#/components/schemas/Id'
+                },
+                category: {
+                  description: 'Category of an article',
+                  type: 'string',
+                  example: 'sports'
+                }
+              }
+            },
+            Article: {
+              allOf: [
+                {
+                  $ref: '#/components/schemas/ArticleForList'
+                }
+              ],
+              required: ['text'],
+              properties: {
+                text: {
+                  description: 'Content of an article',
+                  type: 'string',
+                  maxLength: 1024,
+                  example: '# Title\n\n## Head Line\n\nBody'
+                }
+              }
+            },
+            ArticleList: {
+              type: 'array',
+              items: {
+                $ref: '#/components/schemas/ArticleForList'
+              }
+            },
+            Error: {
+              description:
+                '<table>\n  <tr>\n    <th>Code</th>\n    <th>Description</th>\n  </tr>\n  <tr>\n    <td>illegal_input</td>\n    <td>The input is invalid.</td>\n  </tr>\n  <tr>\n    <td>not_found</td>\n    <td>The resource is not found.</td>\n  </tr>\n</table>\n',
+              required: ['code', 'message'],
+              properties: {
+                code: {
+                  type: 'string',
+                  example: 'illegal_input'
+                }
+              }
+            }
+          },
+          parameters: {
+            Id: {
+              name: 'id',
+              in: 'path',
+              description: 'Prompt ID',
+              required: true,
+              schema: {
+                $ref: '#/components/schemas/Id'
+              }
+            }
+          },
+          responses: {
+            NotFound: {
+              description: 'The resource is not found.',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/Error'
+                  }
+                }
+              }
+            },
+            IllegalInput: {
+              description: 'The input is invalid.',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/Error'
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    </script>
   </body>
 </html>

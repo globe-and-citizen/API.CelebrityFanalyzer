@@ -3,7 +3,6 @@ import page404 from './routes/404.js'
 import collection from './routes/collection.js'
 import company from './routes/company.js'
 import html from './routes/index.html'
-import v1 from './routes/v1.html'
 
 export default {
   async fetch(request, env, ctx) {
@@ -13,12 +12,8 @@ export default {
     const documentId = pathname.split('/').filter(Boolean)[1]
     const subcollectionName = pathname.split('/').filter(Boolean)[2]
 
-    if (pathname === '/') {
+    if (pathname === '/' || pathname === '/v1') {
       return new Response(html, { headers: { 'content-type': 'text/html' } })
-    }
-
-    if (pathname === '/v1') {
-      return new Response(v1, { headers: { 'content-type': 'text/html' } })
     }
 
     if (pathname === '/company') {
