@@ -1,8 +1,8 @@
-import { fetchFromFirestore } from './firebase'
 import page404 from './routes/404.js'
 import collection from './routes/collection.js'
 import company from './routes/company.js'
 import html from './routes/index.html'
+import subcollection from './routes/subcollection.js'
 
 export default {
   async fetch(request, env, ctx) {
@@ -25,14 +25,13 @@ export default {
       return new Response(response, { headers: { 'Content-Type': 'application/json' } })
     }
 
-    if ((collectionName === 'prompts' || collectionName === 'entries') && /^[0-9]{4}-[0-9]{2}$/.test(documentId)) {
-      switch (subcollectionName) {
-        case 'visitors':
-        case 'shares':
-        case 'likes':
-          const subcollectionData = await fetchFromFirestore(`${collectionName}/${documentId}/${subcollectionName}`)
-          return new Response(JSON.stringify(subcollectionData, null, 2), { headers: { 'Content-Type': 'application/json' } })
-      }
+    if (
+      ['prompts', 'entries'].includes(collectionName) &&
+      /^[0-9]{4}-[0-9]{2}$/.test(documentId) &&
+      ['dislikes', 'likes', 'shares', 'visitors'].includes(subcollectionName)
+    ) {
+      const response = await subcollection(collectionName, documentId, subcollectionName)
+      return new Response(response, { headers: { 'Content-Type': 'application/json' } })
     }
 
     return new Response(page404, { headers: { 'content-type': 'application/json' }, status: 404 })
