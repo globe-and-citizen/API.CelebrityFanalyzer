@@ -13,32 +13,31 @@ export default {
     const documentId = pathname.split('/').filter(Boolean)[1]
     const subcollectionName = pathname.split('/').filter(Boolean)[2]
 
-    switch (pathname) {
-      case '/':
-        return new Response(html, { headers: { 'content-type': 'text/html' } })
+    if (pathname === '/') {
+      return new Response(html, { headers: { 'content-type': 'text/html' } })
+    }
 
-      case '/v1':
-        return new Response(v1, { headers: { 'content-type': 'text/html' } })
+    if (pathname === '/v1') {
+      return new Response(v1, { headers: { 'content-type': 'text/html' } })
+    }
 
-      case '/company':
-        return new Response(company, { headers: { 'Content-Type': 'application/json' } })
+    if (pathname === '/company') {
+      return new Response(company, { headers: { 'Content-Type': 'application/json' } })
+    }
 
-      case '/prompts':
-      case '/entries':
-        const response = await collection(collectionName)
-        return new Response(response, { headers: { 'Content-Type': 'application/json' } })
+    if (pathname === '/prompts' || pathname === '/entries') {
+      const response = await collection(collectionName)
+      return new Response(response, { headers: { 'Content-Type': 'application/json' } })
+    }
 
-      default:
-        if ((collectionName === 'prompts' || collectionName === 'entries') && /^[0-9]{4}-[0-9]{2}$/.test(documentId)) {
-          switch (subcollectionName) {
-            case 'visitors':
-            case 'shares':
-            case 'likes':
-              const subcollectionData = await fetchFromFirestore(`${collectionName}/${documentId}/${subcollectionName}`)
-              return new Response(JSON.stringify(subcollectionData, null, 2), { headers: { 'Content-Type': 'application/json' } })
-          }
-        }
-        break
+    if ((collectionName === 'prompts' || collectionName === 'entries') && /^[0-9]{4}-[0-9]{2}$/.test(documentId)) {
+      switch (subcollectionName) {
+        case 'visitors':
+        case 'shares':
+        case 'likes':
+          const subcollectionData = await fetchFromFirestore(`${collectionName}/${documentId}/${subcollectionName}`)
+          return new Response(JSON.stringify(subcollectionData, null, 2), { headers: { 'Content-Type': 'application/json' } })
+      }
     }
 
     return new Response(page404, { headers: { 'content-type': 'application/json' }, status: 404 })
