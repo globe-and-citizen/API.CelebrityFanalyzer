@@ -1,5 +1,5 @@
 import { fetchFromFirestore } from './firebase'
-import page404 from './routes/404.html'
+import page404 from './routes/404.js'
 import collection from './routes/collection.js'
 import company from './routes/company.js'
 import html from './routes/index.html'
@@ -41,6 +41,6 @@ export default {
         break
     }
 
-    return new Response(page404, { headers: { 'content-type': 'text/html' }, status: 404 })
+    return new Response(page404, { headers: { 'content-type': 'application/json' }, status: 404 })
   }
 }
