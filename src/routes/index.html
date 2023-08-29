@@ -40,18 +40,41 @@
           '/prompts': {
             get: {
               summary: 'Get a list of all prompts.',
-              operationId: 'listArticles',
-              tags: ['Prompts API'],
+              operationId: 'listPrompts',
+              tags: ['Collections API'],
               responses: {
                 200: {
                   description: 'Success',
                   content: {
                     'application/json': {
                       schema: {
-                        $ref: '#/components/schemas/ArticleList'
+                        $ref: '#/components/schemas/Collection'
                       }
                     }
                   }
+                },
+                404: {
+                  $ref: '#/components/responses/NotFound'
+                }
+              }
+            }
+          },
+          '/entries': {
+            get: {
+              summary: 'Get a list of all entries.',
+              operationId: 'listEntries',
+              tags: ['Collections API'],
+              responses: {
+                200: {
+                  description: 'Success',
+                  content: {
+                    'application/json': {
+                      schema: { $ref: '#/components/schemas/Collection' }
+                    }
+                  }
+                },
+                404: {
+                  $ref: '#/components/responses/NotFound'
                 }
               }
             }
@@ -60,23 +83,23 @@
             get: {
               summary: 'Get visitors from a prompt.',
               operationId: 'getPrompt',
-              tags: ['Prompts API'],
+              tags: ['Subcollections API'],
               parameters: [
                 {
-                  $ref: '#/components/parameters/Id'
+                  $ref: '#/components/parameters/id'
                 }
               ],
               responses: {
-                200: {
-                  description: 'Success',
-                  content: {
-                    'application/json': {
-                      schema: {
-                        $ref: '#/components/schemas/Article'
-                      }
-                    }
-                  }
-                },
+                // 200: {
+                //   description: 'Success',
+                //   content: {
+                //     'application/json': {
+                //       schema: {
+                //         $ref: '#/components/schemas/Article'
+                //       }
+                //     }
+                //   }
+                // },
                 404: {
                   $ref: '#/components/responses/NotFound'
                 }
@@ -87,86 +110,73 @@
 
         components: {
           schemas: {
-            Id: {
-              description: 'Prompt ID',
-              type: 'string',
-              readOnly: true,
-              example: '2023-11'
-            },
-            ArticleForList: {
-              properties: {
-                id: {
-                  $ref: '#/components/schemas/Id'
-                },
-                category: {
-                  description: 'Category of an article',
-                  type: 'string',
-                  example: 'sports'
-                }
-              }
-            },
-            Article: {
-              allOf: [
-                {
-                  $ref: '#/components/schemas/ArticleForList'
-                }
-              ],
-              required: ['text'],
-              properties: {
-                text: {
-                  description: 'Content of an article',
-                  type: 'string',
-                  maxLength: 1024,
-                  example: '# Title\n\n## Head Line\n\nBody'
-                }
-              }
-            },
-            ArticleList: {
+            Collection: {
               type: 'array',
               items: {
-                $ref: '#/components/schemas/ArticleForList'
+                $ref: '#/components/schemas/Document'
               }
             },
-            Error: {
-              description:
-                '<table>\n  <tr>\n    <th>Code</th>\n    <th>Description</th>\n  </tr>\n  <tr>\n    <td>illegal_input</td>\n    <td>The input is invalid.</td>\n  </tr>\n  <tr>\n    <td>not_found</td>\n    <td>The resource is not found.</td>\n  </tr>\n</table>\n',
-              required: ['code', 'message'],
+            Document: {
+              type: 'object',
               properties: {
-                code: {
+                id: {
+                  $ref: '#/components/parameters/id'
+                },
+                title: {
                   type: 'string',
-                  example: 'illegal_input'
+                  example: 'Lorem Ipsum'
+                },
+                slug: {
+                  type: 'string',
+                  example: 'lorem-ipsum'
                 }
+              },
+              xml: {
+                name: 'Document' // Coloque o nome como uma string
+              },
+              required: ['id', 'title', 'slug']
+            },
+            Subcollection: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  id: {
+                    $ref: '#/components/parameters/id'
+                  }
+                },
+                required: ['id', 'title', 'slug']
               }
             }
           },
           parameters: {
-            Id: {
+            id: {
               name: 'id',
               in: 'path',
-              description: 'Prompt ID',
+              // description: 'Document ID',
               required: true,
-              schema: {
-                $ref: '#/components/schemas/Id'
-              }
+              type: 'string',
+              example: '2023-11'
             }
           },
           responses: {
             NotFound: {
-              description: 'The resource is not found.',
+              description: 'Not Found',
+              documentation_url: '/v1',
               content: {
                 'application/json': {
                   schema: {
-                    $ref: '#/components/schemas/Error'
-                  }
-                }
-              }
-            },
-            IllegalInput: {
-              description: 'The input is invalid.',
-              content: {
-                'application/json': {
-                  schema: {
-                    $ref: '#/components/schemas/Error'
+                    type: 'object',
+                    properties: {
+                      message: {
+                        type: 'string',
+                        example: 'Not Found'
+                      },
+                      documentation_url: {
+                        type: 'string',
+                        example: '/v1'
+                      }
+                    }
                   }
                 }
               }
