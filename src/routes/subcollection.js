@@ -12,10 +12,12 @@ async function handleRequest(collectionName, documentId, subcollectionName) {
       }
 
       if (subcollectionName === 'shares') {
-        return documents.map((document) => ({
+        const data = documents.map((document) => ({
           createdAt: document.fields.createdAt.timestampValue,
           sharedOn: document.fields.sharedOn.stringValue
         }))
+        const total = data.length
+        return { data, total }
       }
 
       if (subcollectionName === 'visitors') {
