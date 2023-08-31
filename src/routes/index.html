@@ -11,13 +11,6 @@
     <div id="swagger-ui"></div>
     <script src="https://unpkg.com/swagger-ui-dist@5.4.2/swagger-ui-bundle.js" crossorigin></script>
     <script>
-      window.onload = function () {
-        const ui = SwaggerUIBundle({
-          spec: spec,
-          dom_id: '#swagger-ui'
-        })
-      }
-
       // Swagger Documentation: https://swagger.io/docs/specification/about/
       // Example: https://petstore.swagger.io/v2/swagger.json
       const spec = {
@@ -249,6 +242,13 @@
             }
           }
         }
+      }
+
+      window.onload = function () {
+        SwaggerUIBundle({
+          spec: spec,
+          dom_id: '#swagger-ui'
+        })
       }
     </script>
   </body>
