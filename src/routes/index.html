@@ -32,11 +32,13 @@
             url: 'https://github.com/globe-and-citizen/Celebrity-Fanalyzer/blob/main/LICENSE.md'
           }
         },
+
         externalDocs: {
           description: 'Find out more about Celebrity Fanalyzer',
           url: 'https://github.com/globe-and-citizen/celebrity-fanalyzer'
         },
         // servers: [{ url: '/' }],
+
         paths: {
           '/prompts': {
             get: {
@@ -48,15 +50,11 @@
                   description: 'Success',
                   content: {
                     'application/json': {
-                      schema: {
-                        $ref: '#/components/schemas/Collection'
-                      }
+                      schema: { $ref: '#/components/schemas/Collection' }
                     }
                   }
                 },
-                404: {
-                  $ref: '#/components/responses/NotFound'
-                }
+                404: { $ref: '#/components/responses/NotFound' }
               }
             }
           },
@@ -74,36 +72,119 @@
                     }
                   }
                 },
-                404: {
-                  $ref: '#/components/responses/NotFound'
-                }
+                404: { $ref: '#/components/responses/NotFound' }
               }
             }
           },
-          '/prompts/{id}/visitors': {
+          '/{collection}/{id}/dislikes': {
             get: {
-              summary: 'Get visitors from a prompt.',
-              operationId: 'getPrompt',
+              summary: 'Get dislikes from a collection.',
+              operationId: 'getDislikes',
               tags: ['Subcollections API'],
-              parameters: [
-                {
-                  $ref: '#/components/parameters/id'
-                }
-              ],
+              parameters: [{ $ref: '#/components/parameters/collection' }, { $ref: '#/components/parameters/id' }],
               responses: {
-                // 200: {
-                //   description: 'Success',
-                //   content: {
-                //     'application/json': {
-                //       schema: {
-                //         $ref: '#/components/schemas/Article'
-                //       }
-                //     }
-                //   }
-                // },
-                404: {
-                  $ref: '#/components/responses/NotFound'
-                }
+                200: {
+                  description: 'Success',
+                  content: {
+                    'application/json': {
+                      schema: {
+                        type: 'object',
+                        properties: {
+                          data: {
+                            type: 'array',
+                            example: ['2023-08-01T11:40:54.753Z', '2023-07-30T18:03:54.338Z', '2023-07-30T14:38:47.042Z']
+                          },
+                          total: { type: 'integer', example: 3 }
+                        }
+                      }
+                    }
+                  }
+                },
+                404: { $ref: '#/components/responses/NotFound' }
+              }
+            }
+          },
+          '/{collection}/{id}/likes': {
+            get: {
+              summary: 'Get likes from a collection.',
+              operationId: 'getLikes',
+              tags: ['Subcollections API'],
+              parameters: [{ $ref: '#/components/parameters/collection' }, { $ref: '#/components/parameters/id' }],
+              responses: {
+                200: {
+                  description: 'Success',
+                  content: {
+                    'application/json': {
+                      schema: {
+                        type: 'object',
+                        properties: {
+                          data: {
+                            type: 'array',
+                            example: ['2023-08-05T11:11:11.514Z', '2023-07-31T11:21:04.931Z', '2023-08-07T17:41:00.502Z']
+                          },
+                          total: { type: 'integer', example: 3 }
+                        }
+                      }
+                    }
+                  }
+                },
+                404: { $ref: '#/components/responses/NotFound' }
+              }
+            }
+          },
+          '/{collection}/{id}/shares': {
+            get: {
+              summary: 'Get visitors from a collection.',
+              operationId: 'getShares',
+              tags: ['Subcollections API'],
+              parameters: [{ $ref: '#/components/parameters/collection' }, { $ref: '#/components/parameters/id' }],
+              responses: {
+                200: {
+                  description: 'Success',
+                  content: {
+                    'application/json': {
+                      schema: {
+                        type: 'object',
+                        properties: {
+                          data: {
+                            type: 'array',
+                            example: [
+                              { createdAt: '2023-08-11T09:27:13.996Z', sharedOn: 'clipboard' },
+                              { createdAt: '2023-08-12T06:58:53.070Z', sharedOn: 'twitter' }
+                            ]
+                          },
+                          total: { type: 'integer', example: 2 }
+                        }
+                      }
+                    }
+                  }
+                },
+                404: { $ref: '#/components/responses/NotFound' }
+              }
+            }
+          },
+          '/{collection}/{id}/visitors': {
+            get: {
+              summary: 'Get visitors from a collection.',
+              operationId: 'getVisitors',
+              tags: ['Subcollections API'],
+              parameters: [{ $ref: '#/components/parameters/collection' }, { $ref: '#/components/parameters/id' }],
+              responses: {
+                200: {
+                  description: 'Success',
+                  content: {
+                    'application/json': {
+                      schema: {
+                        type: 'object',
+                        properties: {
+                          data: { type: 'array', example: [['7/16/2023'], ['8/16/2023'], ['7/30/2023', '8/1/2023']] },
+                          total: { type: 'integer', example: 4 }
+                        }
+                      }
+                    }
+                  }
+                },
+                404: { $ref: '#/components/responses/NotFound' }
               }
             }
           }
@@ -133,18 +214,6 @@
                 }
               },
               required: ['id', 'title', 'slug']
-            },
-            Subcollection: {
-              type: 'array',
-              items: {
-                type: 'object',
-                properties: {
-                  id: {
-                    $ref: '#/components/parameters/id'
-                  }
-                },
-                required: ['id', 'title', 'slug']
-              }
             }
           },
           parameters: {
@@ -154,6 +223,13 @@
               required: true,
               type: 'string',
               example: '2023-11'
+            },
+            collection: {
+              name: 'collection',
+              in: 'path',
+              required: true,
+              type: 'string',
+              example: 'prompts'
             }
           },
           responses: {
