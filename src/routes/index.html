@@ -26,6 +26,7 @@
           description: 'This is the API documentation for Celebrity Fanalyzer.',
           version: '1.0.0',
           title: 'Celebrity Fanalyzer API',
+          termsOfService: 'http://celebrityfanalyzer.com/terms-of-service/',
           license: {
             name: 'GNU General Public License v2.0',
             url: 'https://github.com/globe-and-citizen/Celebrity-Fanalyzer/blob/main/LICENSE.md'
@@ -131,9 +132,6 @@
                   example: 'lorem-ipsum'
                 }
               },
-              xml: {
-                name: 'Document' // Coloque o nome como uma string
-              },
               required: ['id', 'title', 'slug']
             },
             Subcollection: {
@@ -153,7 +151,6 @@
             id: {
               name: 'id',
               in: 'path',
-              // description: 'Document ID',
               required: true,
               type: 'string',
               example: '2023-11'
@@ -162,20 +159,13 @@
           responses: {
             NotFound: {
               description: 'Not Found',
-              documentation_url: '/v1',
               content: {
                 'application/json': {
                   schema: {
                     type: 'object',
                     properties: {
-                      message: {
-                        type: 'string',
-                        example: 'Not Found'
-                      },
-                      documentation_url: {
-                        type: 'string',
-                        example: '/v1'
-                      }
+                      message: { type: 'string', example: 'Not Found' },
+                      documentation_url: { type: 'string', example: '/v1' }
                     }
                   }
                 }
