@@ -1,4 +1,5 @@
 import { fetchFromFirestore } from '../firebase'
+import page404 from './404.js'
 
 async function handleRequest(collectionName, documentId, subcollectionName) {
   try {
@@ -29,7 +30,7 @@ async function handleRequest(collectionName, documentId, subcollectionName) {
 
     return JSON.stringify(subcollection, null, 2)
   } catch (error) {
-    return JSON.stringify({ error: 'An error occurred while processing the request.' })
+    return page404
   }
 }
 
