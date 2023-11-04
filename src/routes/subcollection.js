@@ -21,6 +21,19 @@ async function handleRequest(collectionName, documentId, subcollectionName) {
         return { data, total }
       }
 
+      if (subcollectionName === 'stats') {
+        const data = documents.map((document) => ({
+          createdAt: document.fields.created.timestampValue,
+          clicks: document.fields.clicks.integerValue,
+          mouseMovements: document.fields.mouseMovements.integerValue,
+          totalTime: document.fields.totalTime.integerValue,
+          scrolls: document.fields.scrolls.integerValue,
+          keypresses: document.fields.keypresses.integerValue
+        }))
+        const total = data.length
+        return { data, total }
+      }
+
       if (subcollectionName === 'visitors') {
         const data = documents.map((document) => document.fields.visits.arrayValue.values.map((value) => value.stringValue))
         const total = data.length
