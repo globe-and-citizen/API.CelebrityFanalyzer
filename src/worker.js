@@ -27,8 +27,7 @@ export default {
 
     if (
       ['prompts', 'entries'].includes(collectionName) &&
-      /^[0-9]{4}-[0-9]{2}$/.test(documentId) &&
-      ['dislikes', 'likes', 'shares', 'visitors'].includes(subcollectionName)
+      ['dislikes', 'likes', 'shares', 'stats', 'visitors'].includes(subcollectionName)
     ) {
       const response = await subcollection(collectionName, documentId, subcollectionName)
       return new Response(response, { headers: { 'Content-Type': 'application/json' } })
