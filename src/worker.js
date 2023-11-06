@@ -13,16 +13,16 @@ export default {
     const subcollectionName = pathname.split('/').filter(Boolean)[2]
 
     if (pathname === '/' || pathname === '/v1') {
-      return new Response(html, { headers: { 'content-type': 'text/html' } })
+      return new Response(html, { headers: { 'content-type': 'text/html', 'Access-Control-Allow-Origin': '*' } })
     }
 
     if (pathname === '/company') {
-      return new Response(company, { headers: { 'Content-Type': 'application/json' } })
+      return new Response(company, { headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } })
     }
 
     if (pathname === '/prompts' || pathname === '/entries') {
       const response = await collection(collectionName)
-      return new Response(response, { headers: { 'Content-Type': 'application/json' } })
+      return new Response(response, { headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } })
     }
 
     if (
@@ -30,9 +30,9 @@ export default {
       ['dislikes', 'likes', 'shares', 'stats', 'visitors'].includes(subcollectionName)
     ) {
       const response = await subcollection(collectionName, documentId, subcollectionName)
-      return new Response(response, { headers: { 'Content-Type': 'application/json' } })
+      return new Response(response, { headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } })
     }
 
-    return new Response(page404, { headers: { 'content-type': 'application/json' }, status: 404 })
+    return new Response(page404, { headers: { 'content-type': 'application/json', 'Access-Control-Allow-Origin': '*' }, status: 404 })
   }
 }
