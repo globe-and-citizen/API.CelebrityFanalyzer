@@ -5,11 +5,11 @@ async function handleRequest(collectionName, documentId, subcollectionName) {
   try {
     const path = `${collectionName}/${documentId}/${subcollectionName}`
 
-    const subcollection = await fetchFromFirestore(path).then(({ documents }) => {
+    const subcollection = await fetchFromFirestore(path).then(({ documents, nextPageToken }) => {
       if (subcollectionName === 'dislikes' || subcollectionName === 'likes') {
         const data = documents.map((document) => document.fields.createdAt.timestampValue)
         const total = data.length
-        return { data, total }
+        return { data, nextPageToken, total }
       }
 
       if (subcollectionName === 'shares') {
@@ -18,7 +18,7 @@ async function handleRequest(collectionName, documentId, subcollectionName) {
           sharedOn: document.fields.sharedOn.stringValue
         }))
         const total = data.length
-        return { data, total }
+        return { data, nextPageToken, total }
       }
 
       if (subcollectionName === 'stats') {
@@ -31,13 +31,13 @@ async function handleRequest(collectionName, documentId, subcollectionName) {
           keypresses: document.fields.keypresses.integerValue
         }))
         const total = data.length
-        return { data, total }
+        return { data, nextPageToken, total }
       }
 
       if (subcollectionName === 'visitors') {
         const data = documents.map((document) => document.fields.visits.arrayValue.values.map((value) => value.stringValue))
         const total = data.length
-        return { data, total }
+        return { data, nextPageToken, total }
       }
     })
 
