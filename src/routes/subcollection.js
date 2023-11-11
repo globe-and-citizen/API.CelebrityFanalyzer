@@ -24,11 +24,11 @@ async function handleRequest(collectionName, documentId, subcollectionName, sear
       if (subcollectionName === 'stats') {
         const data = documents.map((document) => ({
           createdAt: document.fields.created.timestampValue,
-          clicks: document.fields.clicks.integerValue,
-          mouseMovements: document.fields.mouseMovements.integerValue,
-          totalTime: document.fields.totalTime.integerValue,
-          scrolls: document.fields.scrolls.integerValue,
-          keypresses: document.fields.keypresses.integerValue
+          clicks: parseInt(document.fields.clicks.integerValue),
+          mouseMovements: parseInt(document.fields.mouseMovements.integerValue),
+          totalTime: parseInt(document.fields.totalTime.integerValue),
+          scrolls: parseInt(document.fields.scrolls.integerValue),
+          keypresses: parseInt(document.fields.keypresses.integerValue)
         }))
         const total = data.length
         return { data, nextPageToken, total }
