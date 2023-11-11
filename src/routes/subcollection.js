@@ -23,6 +23,7 @@ async function handleRequest(collectionName, documentId, subcollectionName, sear
 
       if (subcollectionName === 'stats') {
         const data = documents.map((document) => ({
+          author: document.fields.author.referenceValue ? document.fields.author.referenceValue.split('/').pop() : null,
           createdAt: document.fields.created.timestampValue,
           clicks: parseInt(document.fields.clicks.integerValue),
           mouseMovements: parseInt(document.fields.mouseMovements.integerValue),
