@@ -6,7 +6,7 @@ import subcollection from './routes/subcollection.js'
 
 export default {
   async fetch(request, env, ctx) {
-    const { pathname } = new URL(request.url)
+    const { pathname, searchParams } = new URL(request.url)
 
     const collectionName = pathname.split('/').filter(Boolean)[0]
     const documentId = pathname.split('/').filter(Boolean)[1]
@@ -21,7 +21,7 @@ export default {
     }
 
     if (pathname === '/prompts' || pathname === '/entries') {
-      const response = await collection(collectionName)
+      const response = await collection(collectionName, searchParams)
       return new Response(response, { headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } })
     }
 
@@ -29,7 +29,7 @@ export default {
       ['prompts', 'entries'].includes(collectionName) &&
       ['dislikes', 'likes', 'shares', 'stats', 'visitors'].includes(subcollectionName)
     ) {
-      const response = await subcollection(collectionName, documentId, subcollectionName)
+      const response = await subcollection(collectionName, documentId, subcollectionName, searchParams)
       return new Response(response, { headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } })
     }
 
