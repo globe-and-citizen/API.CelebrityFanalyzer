@@ -1,11 +1,11 @@
 import { fetchFromFirestore } from '../firebase'
 import page404 from './404.js'
 
-async function handleRequest(collectionName, documentId, subcollectionName) {
+async function handleRequest(collectionName, documentId, subcollectionName, searchParams) {
   try {
     const path = `${collectionName}/${documentId}/${subcollectionName}`
 
-    const subcollection = await fetchFromFirestore(path).then(({ documents, nextPageToken }) => {
+    const subcollection = await fetchFromFirestore(path, searchParams).then(({ documents, nextPageToken }) => {
       if (subcollectionName === 'dislikes' || subcollectionName === 'likes') {
         const data = documents.map((document) => document.fields.createdAt.timestampValue)
         const total = data.length
